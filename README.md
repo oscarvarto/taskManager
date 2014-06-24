@@ -16,32 +16,40 @@ Current State
 --------------
 
 There are several ideas that are implemented here:
-1. Every Android Activity uses Fragments. Fragments have a corresponding Actor, here called "Reactors",
-   that are responsible for communication with the rest of the actor system.
+
+1. Every Android Activity uses Fragments. Fragments have a corresponding Actor, here called "Reactors", that are responsible for communication with the rest of the actor system.
+
 2. The actor system is created and maintained in a singleton object named ActorSystemManager.
    This also holds a `controller` and a `fsmProcessor`.
+
 3. `ActorSystemManager.controller` manages a stack of `ActivityActors` each one of them responsible of 
    handling events of a corresponding `ThereActivity` (an actual Android Activity of the application).
    For example:
    LogonAA (The Logon Android Activity) is handled by LogonActivityActor.
    MoodAA (The Mood Android Activity) is handled by MoodActivityActor.
    TaskListAA (The TaskList Android Activity) is handled by TasksActivityActor.
+
 4. `ActorSystemManager.fsmProcessor` is in charge of message persistence.
+
 5. `ThereActivity`s (like `LogonAA`) have one or more `ThereFragments` (like `LogonFragment`) each one
    "owning" a reactor (like `LogonReactor`). Every reactor is an Akka FSM that can be in two states:
    `WaitingForInitialiser` or `Working`. See `ThereActivityReactorTypes.scala`.
+
 6. A `ThereActivity` is not the main responsible for keeping state information. This responsibility
    is delegated to the corresponding `ActivityActor` (which is an Akka FMS too). For example,
    `LogonActivityActor` keeps track of the user login (if `LogonAA` is in the `Initial` or `LoggedOn`
    state).
+
 7. A `ThereActivity` also keeps track of the "data" for the corresponding `ThereActivity`. For example,
    `LogonActivityActor` receives the name and email introduced in the widgets created in `LogonFragment`
    and stores this information. See the definition of the type `LogonAA.A` (which is `UserData`) in
    `LogonAA.scala`. After a `ThereFragment` is destroyed (for example, after rotation of device) and
    created again, it restores the data from the backup in the corresponding `ActivityActor`.
    See `TaskListAA` and corresponding `TaskActivityActor` for an example using `ListFragment`.
+
 8. The life cycle of reactors is tied to the life cycle of the corresponding `ThereFragment`. A reactor is
    created during `onCreate(Bundle)` and destroyed during `onDestroy()`. See `ThereActivity.scala`.
+
 9. Logic (code) for the "control" of the application is not inside `ThereFragments`. It is supposed to live
    in the `controller` and the `ActivityActors`.
 
@@ -62,8 +70,8 @@ along the way. I would like to get the final `recovered` state and data and then
 stack of Android Activities (`ThereActivity`s) _and_ `ActivityActors`. However, I don't know how to do this
 without a (big) modification of the Akka FSMs for `ActivityActors`.
 
-A completely different path
----------------------------
+A completely different path (for my spare time)
+-----------------------------------------------
 Using Akka stuff on Android has been somewhat painful. Take a look at the messy Proguard configuration I got
 to avoid runtime errors because Proguard is not able to see that a lot of things in Akka use **reflection**.
 
@@ -82,3 +90,7 @@ In my limited understanding I thought of this:
 <--- I NEED HELP HERE TOO, because my `functional`-kung-fu is not very mature (still).
 
 
+Credits
+=======
+
++ Sponsored by Tim Pigden and Optrak.
