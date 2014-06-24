@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_name">Username</string>
+    <string name="email_address_hint">example@gmail.com</string>
+    <string name="logon">Logon</string>
+    <string name="quit">Quit</string>
+
+    <string name="make_me_sad">Make Me Sad</string>
+    <string name="make_me_happy">Make Me Happy</string>
+    <string name="tasks_title">Tasks</string>
+
+    <string name="start_task_list">Start Task List</string>
+    <string name="go_to_previous_screen">Go To Previous Screen</string>
+
+    <string name="go_to_logon_screen">Go To Logon Screen</string>
+    <string name="append_task">Append Task</string>
+    <string name="bomb">Bomb</string>
+</resources>
